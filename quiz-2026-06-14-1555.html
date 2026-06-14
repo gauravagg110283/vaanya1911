@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vaanya's Vocabulary Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #fdf6ec;
+    color: #2c1810;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  .header {
+    text-align: center;
+    padding: 30px 20px 20px;
+    margin-bottom: 30px;
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #c0521e;
+    margin-bottom: 8px;
+  }
+  .header p {
+    font-size: 16px;
+    color: #7a5c3a;
+  }
+  .badge {
+    display: inline-block;
+    background: #f5a623;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .question-card {
+    background: white;
+    border: 2px solid #f0dfc0;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .question-number {
+    font-size: 12px;
+    font-weight: 700;
+    color: #f5a623;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .question-type-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #b07a40;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 10px;
+    background: #fff3dc;
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 10px;
+  }
+  .question-text {
+    font-size: 17px;
+    font-weight: 700;
+    color: #2c1810;
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+  .definition-box {
+    background: #fff8ee;
+    border-left: 4px solid #f5a623;
+    padding: 12px 16px;
+    border-radius: 0 10px 10px 0;
+    margin-bottom: 18px;
+    font-size: 16px;
+    color: #5a3e20;
+    line-height: 1.5;
+    font-style: italic;
+  }
+  .options-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-item label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 2px solid #e8d9c0;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    color: #3a2510;
+    background: #fffaf3;
+    transition: border-color 0.2s, background 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .option-item input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #f5a623;
+    flex-shrink: 0;
+  }
+  .option-item label:active {
+    background: #fff3dc;
+    border-color: #f5a623;
+  }
+  .sentence-input {
+    width: 100%;
+    border: 2px solid #e8d9c0;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 16px;
+    font-family: 'Nunito', sans-serif;
+    color: #2c1810;
+    background: #fffaf3;
+    resize: vertical;
+    min-height: 90px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .sentence-input:focus {
+    border-color: #f5a623;
+    background: #fffdf8;
+  }
+  .word-highlight {
+    color: #c0521e;
+    font-weight: 800;
+    font-style: italic;
+  }
+  .underline-word {
+    text-decoration: underline;
+    text-decoration-color: #f5a623;
+    text-underline-offset: 3px;
+    font-weight: 700;
+    color: #c0521e;
+  }
+  .passage-box {
+    background: #fff8ee;
+    border: 1px solid #f0dfc0;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: #3a2510;
+  }
+  .sub-question {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed #f0dfc0;
+  }
+  .sub-question:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  .sub-question-text {
+    font-size: 15px;
+    font-weight: 700;
+    color: #5a3e20;
+    margin-bottom: 12px;
+  }
+  .submit-btn {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    margin: 10px auto 40px;
+    background: linear-gradient(135deg, #f5a623, #e8871a);
+    color: white;
+    font-size: 20px;
+    font-weight: 800;
+    padding: 18px;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(245,166,35,0.4);
+    letter-spacing: 0.5px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .submit-btn:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 8px rgba(245,166,35,0.3);
+  }
+  .submit-btn:disabled {
+    background: #c8b89a;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+  .result-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 14px;
+  }
+  .result-correct {
+    background: #e6f9ee;
+    color: #1a7a42;
+    border: 1.5px solid #7edfa8;
+  }
+  .result-incorrect {
+    background: #fdecea;
+    color: #b02a2a;
+    border: 1.5px solid #f5a5a5;
+  }
+  .result-partial {
+    background: #fff3dc;
+    color: #8a5a00;
+    border: 1.5px solid #f5c96a;
+  }
+  .correct-answer-text {
+    font-size: 13px;
+    color: #5a7a5a;
+    margin-top: 6px;
+    font-weight: 600;
+  }
+  .feedback-text {
+    font-size: 14px;
+    color: #7a5c3a;
+    margin-top: 8px;
+    line-height: 1.5;
+    font-style: italic;
+  }
+  .score-board {
+    background: white;
+    border: 3px solid #f5a623;
+    border-radius: 20px;
+    padding: 30px 24px;
+    margin: 10px auto 30px;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(245,166,35,0.2);
+  }
+  .score-board h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #c0521e;
+    margin-bottom: 10px;
+  }
+  .score-number {
+    font-size: 56px;
+    font-weight: 800;
+    color: #f5a623;
+    line-height: 1.1;
+    margin: 10px 0;
+  }
+  .score-out-of {
+    font-size: 20px;
+    color: #b07a40;
+    font-weight: 600;
+  }
+  .score-message {
+    font-size: 17px;
+    color: #5a3e20;
+    margin-top: 12px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .loading-spinner {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 3px solid #f0dfc0;
+    border-top-color: #f5a623;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  .scoring-note {
+    font-size: 13px;
+    color: #b07a40;
+    text-align: center;
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+  .option-item input[type="radio"]:checked + span,
+  .option-item label:has(input:checked) {
+    border-color: #f5a623;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">📚 Weekly Vocabulary Quiz</div>
+  <h1>Vaanya's Word Challenge</h1>
+  <p>10 questions · Monday to Friday words · Do your best! 💛</p>
+</div>
+
+<form id="quizForm">
+
+  <!-- Q1: Definition Match -->
+  <div class="question-card" id="card-q1">
+    <div class="question-type-label">Definition Match</div>
+    <div class="question-number">Question 1 of 10</div>
+    <div class="definition-box">
+      "To quietly agree to something — not enthusiastically, but without putting up a fight. Like a tired 'fine, whatever.'"
+    </div>
+    <div class="question-text">Which word matches this definition?</div>
+    <ul class="options-list">
+      <li class="option-item">
+        <label><input type="radio" name="q1" value="a"> <span>palatable</span></label>
+      </li>
+      <li class="option-item">
+        <label><input type="radio" name="q1" value="b"> <span>acquiesce</span></label>
+      </li>
+      <li class="option-item">
+        <label><input type="radio" name="q1" value="c"> <span>iconoclastic</span></label>
+      </li>
+      <li class="option-item">
+        <label><input type="radio" name="q1" value="d"> <span>dubious</span></label>
+      </li>
+    </ul>
+    <div id="result-q1"></div>
+  </div>
+
+  <!-- Q2: Definition Match -->
+  <div class="question-card" id="card-q2">
+    <div class="question-type-label">Definition Match</div>
+    <div class="question-number">Question 2 of 10</div>
+    <div class="definition-box">
+      "Boldly challenging ideas, traditions, or institutions that most people accept without question. A rebel word for rebels — it literally meant 'image breaker' in ancient Greek."
+    </div>
+    <div class="question-text">Which word matches this definition?</div>
+    <ul class="options-list">
+      <li class="option-item">
+        <label><input type="radio" name="q2" value="a"> <span>dubious</span></label>
+      </li>
+      <li class="option-item">
+        <label><input type="radio" name="q2" value="b"> <span>blame</span></label>
+      </li>
+      <li class="option-item">
+        <label><input type="radio" name="q2" value="c"> <span>iconoclastic</span></label>
+      </li>
+      <li class="option-item">
+        <label><input type="radio" name="q2" value="d"> <span>fleece</span></label>
+      </li>
+    </ul>
+    <div id="result-q2"></div>
+  </div>
+
+  <!-- Q3: Word in Context -->
+  <div class="question-card" id="card-q3">
+    <div class="question-type-label">Word in Context</div>
+    <div class="question-number">Question 3 of 10</div>
+    <div class="question-text">
+      "The new homework policy wasn't great, but most students found it _______ once the teacher explained the reasons behind it."
+    </div>
+    <ul class="options-list">
+      <li class="option-item">
+        <label><input type="radio" name="q3" value="a"> <span>dubious</span></label>
+      </li>
+      <li class="option-item">
+        <label><input type="radio" name="q3" value="b"> <span>iconoclastic</span></label>
+      </li>
+      <li class="option-item">
+        <label><input type="radio" name="q3" value="c"> <span>palatable</span></label>
+      </li>
+      <li class="option-item">
+        <label><input type="radio" name="q3" value="d"> <span>fleeced</span></label>
+      </li>
+    </ul>
+    <div id="result-q3"></div>
+  </div>
+
+  <!-- Q4: Word in Context -->
+  <div class="question-card" id="card-q4">
+    <div class="question-type-label">Word in Context</div>
+    <div class="question-number">Question 4 of 10</div>
+    <div class="question-text">
+      "The tourist felt completely _______ when he discovered the 'antique' vase he'd bought for five thousand rupees was
