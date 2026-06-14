@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vaanya's Weekly Vocabulary Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #fdf6ec;
+    color: #2d2d2d;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  .header {
+    text-align: center;
+    padding: 30px 20px 20px;
+    margin-bottom: 30px;
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #f5a623;
+    margin-bottom: 8px;
+  }
+  .header p {
+    font-size: 16px;
+    color: #666;
+    font-weight: 600;
+  }
+  .header .emoji-row {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+  .quiz-container {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .question-card {
+    background: #fff;
+    border: 2px solid #f5e0b5;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(245,166,35,0.08);
+  }
+  .question-number {
+    display: inline-block;
+    background: #f5a623;
+    color: #fff;
+    font-weight: 800;
+    font-size: 13px;
+    border-radius: 20px;
+    padding: 3px 12px;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+  }
+  .question-type-label {
+    display: inline-block;
+    background: #fff3d6;
+    color: #c47d00;
+    font-weight: 700;
+    font-size: 12px;
+    border-radius: 20px;
+    padding: 3px 10px;
+    margin-bottom: 12px;
+    margin-left: 8px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+  .question-text {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+  .passage-box {
+    background: #fffaf0;
+    border-left: 4px solid #f5a623;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 18px;
+    color: #333;
+  }
+  .passage-box u {
+    color: #c47d00;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: #f5a623;
+  }
+  .options-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .options-list li label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fdf6ec;
+    border: 2px solid #f0e0c0;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .options-list li label:hover {
+    border-color: #f5a623;
+    background: #fff8ea;
+  }
+  .options-list li input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #f5a623;
+    flex-shrink: 0;
+  }
+  .sub-question {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #f0e0c0;
+  }
+  .sub-question-text {
+    font-size: 16px;
+    font-weight: 700;
+    color: #444;
+    margin-bottom: 12px;
+  }
+  .text-input-area {
+    width: 100%;
+    border: 2px solid #f0e0c0;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 16px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    color: #2d2d2d;
+    background: #fdf6ec;
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .text-input-area:focus {
+    border-color: #f5a623;
+    background: #fff;
+  }
+  .word-highlight {
+    background: #fff3d6;
+    color: #c47d00;
+    font-weight: 800;
+    padding: 1px 6px;
+    border-radius: 6px;
+  }
+  .submit-btn {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    margin: 30px auto 20px;
+    background: #f5a623;
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    padding: 18px 24px;
+    font-size: 20px;
+    font-weight: 800;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(245,166,35,0.35);
+    transition: background 0.2s, transform 0.1s;
+  }
+  .submit-btn:hover { background: #e09510; }
+  .submit-btn:active { transform: scale(0.98); }
+  .submit-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  .result-badge {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+  .result-correct {
+    background: #e6f9ed;
+    color: #1a7a3c;
+    border: 1.5px solid #7fd8a0;
+  }
+  .result-wrong {
+    background: #fdecea;
+    color: #b00020;
+    border: 1.5px solid #f5a0a0;
+  }
+  .result-partial {
+    background: #fff8e1;
+    color: #b06000;
+    border: 1.5px solid #ffc96b;
+  }
+  .result-pending {
+    background: #e8f0fe;
+    color: #1a56b0;
+    border: 1.5px solid #90b8f8;
+  }
+  .score-summary {
+    background: #fff;
+    border: 3px solid #f5a623;
+    border-radius: 20px;
+    padding: 30px 24px;
+    margin: 20px 0 40px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(245,166,35,0.2);
+  }
+  .score-summary h2 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #f5a623;
+    margin-bottom: 10px;
+  }
+  .score-summary .big-score {
+    font-size: 52px;
+    font-weight: 800;
+    color: #2d2d2d;
+    line-height: 1.1;
+    margin: 10px 0;
+  }
+  .score-summary .score-msg {
+    font-size: 18px;
+    font-weight: 700;
+    color: #555;
+    margin-top: 8px;
+  }
+  .loading-text {
+    font-size: 14px;
+    color: #888;
+    font-style: italic;
+    margin-top: 10px;
+  }
+  .option-correct-reveal {
+    color: #1a7a3c;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 6px;
+  }
+  @media (max-width: 500px) {
+    body { padding: 12px; }
+    .header h1 { font-size: 22px; }
+    .question-card { padding: 18px; }
+    .question-text { font-size: 16px; }
+    .submit-btn { font-size: 18px; padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="quiz-container">
+  <div class="header">
+    <div class="emoji-row">📚✨🧠</div>
+    <h1>Weekly Vocabulary Quiz</h1>
+    <p>10 questions · Words from this week · Good luck, Vaanya! 💛</p>
+  </div>
+
+  <!-- Q1: Definition Match -->
+  <div class="question-card" id="qcard-1">
+    <span class="question-number">Q1</span>
+    <span class="question-type-label">Definition Match</span>
+    <div class="question-text">Which word means: <em>"To quietly go along with something without really fighting it — a kind of tired acceptance"?</em></div>
+    <ul class="options-list">
+      <li><label><input type="radio" name="q1" value="a"> Palatable</label></li>
+      <li><label><input type="radio" name="q1" value="b"> Acquiesce</label></li>
+      <li><label><input type="radio" name="q1" value="c"> Dubious</label></li>
+      <li><label><input type="radio" name="q1" value="d"> Iconoclastic</label></li>
+    </ul>
+    <div id="result-1"></div>
+  </div>
+
+  <!-- Q2: Definition Match -->
+  <div class="question-card" id="qcard-2">
+    <span class="question-number">Q2</span>
+    <span class="question-type-label">Definition Match</span>
+    <div class="question-text">Which word means: <em>"Boldly challenging ideas that most people accept without question — like a rebel with a reason"?</em></div>
+    <ul class="options-list">
+      <li><label><input type="radio" name="q2" value="a"> Dubious</label></li>
+      <li><label><input type="radio" name="q2" value="b"> Palatable</label></li>
+      <li><label><input type="radio" name="q2" value="c"> Iconoclastic</label></li>
+      <li><label><input type="radio" name="q2" value="d"> Fleece</label></li>
+    </ul>
+    <div id="result-2"></div>
+  </div>
+
+  <!-- Q3: Word in Context -->
+  <div class="question-card" id="qcard-3">
+    <span class="question-number">Q3</span>
+    <span class="question-type-label">Word in Context</span>
+    <div class="question-text">Choose the best word to complete the sentence:<br><br><em>"The new homework policy wasn't popular, but the teacher made it more ________ by giving students a choice of topics."</em></div>
+    <ul class="options-list">
+      <li><label><input type="radio" name="q3" value="a"> dubious</label></li>
+      <li><label><input type="radio" name="q3" value="b"> iconoclastic</label></li>
+      <li><label><input type="radio" name="q3" value="c"> palatable</label></li>
+      <li><label><input type="radio" name="q3" value="d"> fleeced</label></li>
+    </ul>
+    <div id="result-3"></div>
+  </div>
+
+  <!-- Q4: Word in Context -->
+  <div class="question-card" id="qcard-4">
+    <span class="question-number">Q4</span>
+    <span class="question-type-label">Word in Context</span>
+    <div class="question-text">Choose the best word to complete the sentence:<br><br><em>"The tourist had a ________ feeling about the street vendor's 'original' designer bag being sold for just ₹200."</em></div>
+    <ul class="options-list">
+      <li><label><input type="radio" name="q4" value="a"> palatable</label></li>
+      <li><label><input type="radio" name="q4" value="b"> dubious</label></li>
+      <li><label><input type="radio" name="q4" value="c"> earned</label></li>
+      <li><label><input type="radio" name="q4" value="d"> generational</label></li>
+    </ul>
+    <div id="result-4"></div>
+  </div>
+
+  <!-- Q5: Odd One Out -->
+  <div class="question-card" id="qcard-5">
+    <span class="question-number">Q5</span>
+    <span class="question-type-label">Odd One Out</span>
+    <div class="question-text">Three of these words relate to <strong>accepting or going along with something</strong>. Which one does NOT belong?</div>
+    <ul class="options-list">
+      <li><label><input type="radio" name="q5" value="a"> Acquiesce</label></li>
+      <li><label><input type="radio" name="q5" value="b"> Palatable</label></li>
+      <li><label><input type="radio" name="q5" value="c"> Fleece</label></li>
+      <li><label><input type="radio" name="q5" value="d"> Tolerate</label></li>
+    </ul>
+    <div id="result-5"></div>
+  </div>
+
+  <!-- Q6: Odd One Out -->
+  <div class="question-card" id="qcard-6">
+    <span class="question-number">Q6</span>
+    <span class="question-type-label">Odd One Out</span>
+    <div class="question-text">Three of these words carry a meaning connected to <strong>doubt, suspicion, or uncertainty</strong>. Which one does NOT belong?</div>
+    <ul class="options-list">
+      <li><label><input type="radio" name="q6" value="a"> Dubious</label></li>
+      <li><label><input type="radio" name="q6" value="b"> Questionable</label></li>
+      <li><label
